@@ -30,6 +30,10 @@ def generate_fake_data(num_records, questions):
     
     return pd.DataFrame(data_rows, columns=columns)
 
+def delete_question(idx):
+    """Callback function to remove a question from session state."""
+    st.session_state["questions"].pop(idx)
+
 def main():
     st.title("Dynamic MCQ Generator with Fake Data")
     
@@ -55,9 +59,13 @@ def main():
     
     st.subheader("Current Questions")
     if st.session_state["questions"]:
-        for idx, q in enumerate(st.session_state["questions"], start=1):
-            st.write(f"**Question {idx}:** {q['question']}")
-            st.write(f"**Options:** {', '.join(q['options'])}")
+        # Iterate normally; deletion is handled via an on_click callback
+        for idx, q in enumerate(st.session_state["questions"]):
+            col1, col2 = st.columns([0.9, 0.1])
+            col1.write(f"**Question {idx+1}:** {q['question']}")
+            col1.write(f"**Options:** {', '.join(q['options'])}")
+            # Use trash can emoji (🗑️) for the delete button, with a callback
+            col2.button("🗑️", key=f"delete_{idx}", on_click=delete_question, args=(idx,))
     else:
         st.write("No questions added yet.")
     
