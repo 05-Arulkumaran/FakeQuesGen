@@ -10,18 +10,20 @@ def generate_fake_data(num_records, questions):
     """
     Generate a DataFrame with the following columns:
       - "Timestamp"
+      - "Name"
       - One column per question (using the question text as the header)
     
-    For each record, a random timestamp is generated and for each question,
-    a random answer (from the provided options) is chosen.
+    For each record, a random timestamp and a random name are generated,
+    and for each question, a random answer (from the provided options) is chosen.
     """
-    # Create header: Timestamp + each question text
-    columns = ["Timestamp"] + [q["question"] for q in questions]
+    # Create header: Timestamp, Name + each question text
+    columns = ["Timestamp", "Name"] + [q["question"] for q in questions]
     data_rows = []
     
     for _ in range(num_records):
         row = {}
         row["Timestamp"] = str(fake.date_time_this_year())
+        row["Name"] = fake.name()
         for q in questions:
             row[q["question"]] = random.choice(q["options"])
         data_rows.append(row)
